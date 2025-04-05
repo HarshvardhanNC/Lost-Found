@@ -222,36 +222,81 @@ const MenuManagement = () => {
     return (
         <Box>
             <Box mb={3}>
-                <Tabs value={activeTab} onChange={handleTabChange}>
+                <Tabs 
+                    value={activeTab} 
+                    onChange={handleTabChange}
+                    sx={{
+                        '& .MuiTabs-indicator': {
+                            backgroundColor: 'primary.main',
+                            height: 3,
+                        },
+                        '& .MuiTab-root': {
+                            color: 'rgba(0, 0, 0, 0.6)',
+                            '&.Mui-selected': {
+                                color: 'rgba(0, 0, 0, 0.87)',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        borderBottom: '1px solid rgba(0, 0, 0, 0.1)'
+                    }}
+                >
                     <Tab label="Today's Menu" />
                     <Tab label="Master Menu Items" />
                 </Tabs>
             </Box>
 
             {error && (
-                <Alert severity="error" sx={{ mb: 2 }}>
+                <Alert 
+                    severity="error" 
+                    sx={{ 
+                        mb: 2,
+                        backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(211, 47, 47, 0.3)',
+                        color: '#ff5252',
+                        '& .MuiAlert-icon': {
+                            color: '#ff5252'
+                        }
+                    }}
+                >
                     {error}
                 </Alert>
             )}
 
             {activeTab === 0 && (
                 <Box>
-                    <Typography variant="h5" gutterBottom>
+                    <Typography variant="h5" gutterBottom sx={{ color: 'rgba(0, 0, 0, 0.87)', mb: 3 }}>
                         Today's Available Items
                     </Typography>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={4} sx={{ px: 2 }}>
                         {dailyMenu?.items?.map(({ menuItem, isAvailable }) => (
                             <Grid item xs={12} sm={6} md={4} key={menuItem._id}>
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6">{menuItem.name}</Typography>
-                                        <Typography color="textSecondary" gutterBottom>
+                                <Card sx={{
+                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    backdropFilter: 'blur(10px)',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                                    transition: 'all 0.3s ease',
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    '&:hover': {
+                                        transform: 'translateY(-5px)',
+                                        boxShadow: '0 8px 40px rgba(0, 0, 0, 0.2)',
+                                    }
+                                }}>
+                                    <CardContent sx={{ flexGrow: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'rgba(0, 0, 0, 0.87)', mb: 1 }}>
+                                            {menuItem.name}
+                                        </Typography>
+                                        <Typography sx={{ color: 'rgba(0, 0, 0, 0.6)', mb: 2 }}>
                                             {menuItem.description}
                                         </Typography>
-                                        <Typography variant="h6" color="primary">
+                                        <Typography variant="h6" sx={{ color: 'primary.main', mb: 1 }}>
                                             ₹{menuItem.price}
                                         </Typography>
-                                        <Typography color="textSecondary">
+                                        <Typography sx={{ color: 'rgba(0, 0, 0, 0.6)', mb: 2 }}>
                                             Category: {menuItem.category}
                                         </Typography>
                                         <FormControlLabel
@@ -263,6 +308,9 @@ const MenuManagement = () => {
                                                 />
                                             }
                                             label={isAvailable ? 'Available' : 'Unavailable'}
+                                            sx={{
+                                                color: isAvailable ? 'success.main' : 'text.secondary'
+                                            }}
                                         />
                                     </CardContent>
                                 </Card>
@@ -275,37 +323,74 @@ const MenuManagement = () => {
             {activeTab === 1 && (
                 <Box>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                        <Typography variant="h5">Master Menu Items</Typography>
+                        <Typography variant="h5" sx={{ color: 'rgba(0, 0, 0, 0.87)' }}>
+                            Master Menu Items
+                        </Typography>
                         <Button
                             variant="contained"
                             color="primary"
                             onClick={() => handleOpenDialog()}
+                            sx={{
+                                background: 'rgba(25, 118, 210, 0.9)',
+                                backdropFilter: 'blur(10px)',
+                                '&:hover': {
+                                    background: 'rgba(25, 118, 210, 1)',
+                                }
+                            }}
                         >
                             Add New Item
                         </Button>
                     </Box>
 
-                    <Grid container spacing={3}>
+                    <Grid container spacing={4} sx={{ px: 2 }}>
                         {masterItems.map((item) => (
                             <Grid item xs={12} sm={6} md={4} key={item._id}>
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6">{item.name}</Typography>
-                                        <Typography color="textSecondary" gutterBottom>
+                                <Card sx={{
+                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    backdropFilter: 'blur(10px)',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                                    transition: 'all 0.3s ease',
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    '&:hover': {
+                                        transform: 'translateY(-5px)',
+                                        boxShadow: '0 8px 40px rgba(0, 0, 0, 0.2)',
+                                    }
+                                }}>
+                                    <CardContent sx={{ flexGrow: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'rgba(0, 0, 0, 0.87)', mb: 1 }}>
+                                            {item.name}
+                                        </Typography>
+                                        <Typography sx={{ color: 'rgba(0, 0, 0, 0.6)', mb: 2 }}>
                                             {item.description}
                                         </Typography>
-                                        <Typography variant="h6" color="primary">
+                                        <Typography variant="h6" sx={{ color: 'primary.main', mb: 1 }}>
                                             ₹{item.price}
                                         </Typography>
-                                        <Typography color="textSecondary">
+                                        <Typography sx={{ color: 'rgba(0, 0, 0, 0.6)', mb: 2 }}>
                                             Category: {item.category}
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <IconButton onClick={() => handleOpenDialog(item)}>
+                                        <IconButton 
+                                            onClick={() => handleOpenDialog(item)}
+                                            sx={{ 
+                                                color: 'primary.main',
+                                                '&:hover': { color: 'primary.dark' }
+                                            }}
+                                        >
                                             <EditIcon />
                                         </IconButton>
-                                        <IconButton onClick={() => handleDelete(item._id)}>
+                                        <IconButton 
+                                            onClick={() => handleDelete(item._id)}
+                                            sx={{ 
+                                                color: 'error.main',
+                                                '&:hover': { color: 'error.dark' }
+                                            }}
+                                        >
                                             <DeleteIcon />
                                         </IconButton>
                                     </CardActions>
@@ -316,8 +401,22 @@ const MenuManagement = () => {
                 </Box>
             )}
 
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>
+            <Dialog 
+                open={openDialog} 
+                onClose={handleCloseDialog}
+                PaperProps={{
+                    sx: {
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(10px)',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                    }
+                }}
+            >
+                <DialogTitle sx={{ 
+                    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                    fontWeight: 'bold'
+                }}>
                     {editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
@@ -332,6 +431,19 @@ const MenuManagement = () => {
                             value={formData.name}
                             onChange={handleChange}
                             required
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'rgba(0, 0, 0, 0.2)',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'rgba(25, 118, 210, 0.5)',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'primary.main',
+                                    }
+                                }
+                            }}
                         />
                         <TextField
                             margin="dense"
@@ -341,6 +453,19 @@ const MenuManagement = () => {
                             fullWidth
                             value={formData.description}
                             onChange={handleChange}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'rgba(0, 0, 0, 0.2)',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'rgba(25, 118, 210, 0.5)',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'primary.main',
+                                    }
+                                }
+                            }}
                         />
                         <TextField
                             margin="dense"
@@ -351,6 +476,19 @@ const MenuManagement = () => {
                             value={formData.price}
                             onChange={handleChange}
                             required
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'rgba(0, 0, 0, 0.2)',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'rgba(25, 118, 210, 0.5)',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'primary.main',
+                                    }
+                                }
+                            }}
                         />
                         <FormControl fullWidth margin="dense">
                             <InputLabel>Category</InputLabel>
@@ -359,6 +497,17 @@ const MenuManagement = () => {
                                 value={formData.category}
                                 onChange={handleChange}
                                 required
+                                sx={{
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: 'rgba(0, 0, 0, 0.2)',
+                                    },
+                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: 'rgba(25, 118, 210, 0.5)',
+                                    },
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: 'primary.main',
+                                    }
+                                }}
                             >
                                 <MenuItem value="Breakfast">Breakfast</MenuItem>
                                 <MenuItem value="Lunch">Lunch</MenuItem>
@@ -368,9 +517,33 @@ const MenuManagement = () => {
                             </Select>
                         </FormControl>
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog}>Cancel</Button>
-                        <Button type="submit" variant="contained" color="primary">
+                    <DialogActions sx={{ 
+                        borderTop: '1px solid rgba(0, 0, 0, 0.1)',
+                        padding: 2
+                    }}>
+                        <Button 
+                            onClick={handleCloseDialog}
+                            sx={{
+                                color: 'text.secondary',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button 
+                            type="submit" 
+                            variant="contained" 
+                            color="primary"
+                            sx={{
+                                background: 'rgba(25, 118, 210, 0.9)',
+                                backdropFilter: 'blur(10px)',
+                                '&:hover': {
+                                    background: 'rgba(25, 118, 210, 1)',
+                                }
+                            }}
+                        >
                             {editingItem ? 'Update' : 'Add'}
                         </Button>
                     </DialogActions>

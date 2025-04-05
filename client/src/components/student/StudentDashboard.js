@@ -19,6 +19,10 @@ const StudentDashboard = () => {
         // Add other feature routes here as they are implemented
     };
 
+    const handleLogoClick = () => {
+        navigate('/');
+    };
+
     const features = [
         {
             name: 'Dashboard',
@@ -32,7 +36,7 @@ const StudentDashboard = () => {
         },
         {
             name: 'Cafeteria',
-            image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
             description: 'Check cafeteria menu, timings, and make online orders'
         },
         {
@@ -52,7 +56,13 @@ const StudentDashboard = () => {
             {/* Navigation Bar */}
             <nav className="navbar">
                 <div className="nav-left">
-                    <h1>College Buddy</h1>
+                    <h1 
+                        onClick={handleLogoClick}
+                        style={{ cursor: 'pointer' }}
+                        className="logo-text"
+                    >
+                        College Buddy
+                    </h1>
                 </div>
                 <div className="nav-center">
                     {features.map((feature) => (

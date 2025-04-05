@@ -30,6 +30,15 @@
     color: #fff;
 }
 
+.logo-text {
+    transition: color 0.3s ease;
+    user-select: none;
+}
+
+.logo-text:hover {
+    color: #4a90e2;
+}
+
 .nav-center {
     display: flex;
     gap: 1.5rem;

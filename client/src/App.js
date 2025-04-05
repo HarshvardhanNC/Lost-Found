@@ -11,6 +11,7 @@ import StudentDashboard from './components/student/StudentDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import CanteenMenu from './components/student/CanteenMenu';
+import LostFoundPage from './components/features/lost-found/LostFoundPage';
 
 // Create a theme instance
 const theme = createTheme({
@@ -74,9 +75,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/student/lost-found"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <LostFoundPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Catch-all route */}
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </ThemeProvider>

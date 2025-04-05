@@ -75,7 +75,7 @@ const Login = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIdwBelWplaDSIan6Fy-lELvYPZ_5EgD9BzA&s)',
+        backgroundImage: 'url(https://allegiance-educare.in/storage/uploads/colleges/1662553710campus%20front.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

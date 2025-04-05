@@ -11,7 +11,6 @@ import {
     Paper,
     CircularProgress,
     Alert,
-    IconButton,
     Chip
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -20,13 +19,25 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     maxHeight: 'calc(100vh - 250px)',
+    background: 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: '12px',
+    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
     '& .MuiTableCell-head': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white,
-        fontWeight: 'bold'
+        backgroundColor: 'rgba(25, 118, 210, 0.2)',
+        backdropFilter: 'blur(10px)',
+        color: 'white',
+        fontWeight: 'bold',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
     },
-    '& .MuiTableRow-root:nth-of-type(even)': {
-        backgroundColor: theme.palette.action.hover
+    '& .MuiTableCell-body': {
+        color: 'rgba(0, 0, 0, 0.87)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+    },
+    '& .MuiTableRow-root:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        transition: 'all 0.3s ease'
     }
 }));
 
@@ -72,14 +83,24 @@ const UserManagement = () => {
     if (error) {
         return (
             <Box p={2}>
-                <Alert severity="error">{error}</Alert>
+                <Alert severity="error" sx={{ 
+                    backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(211, 47, 47, 0.3)',
+                    color: '#ff5252',
+                    '& .MuiAlert-icon': {
+                        color: '#ff5252'
+                    }
+                }}>
+                    {error}
+                </Alert>
             </Box>
         );
     }
 
     return (
         <Box>
-            <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 3, color: 'white' }}>
                 User Management
             </Typography>
 
@@ -100,9 +121,9 @@ const UserManagement = () => {
                                 <TableCell>
                                     <Box display="flex" alignItems="center" gap={1}>
                                         {user.role === 'admin' ? (
-                                            <AdminPanelSettingsIcon color="primary" />
+                                            <AdminPanelSettingsIcon sx={{ color: 'primary.main' }} />
                                         ) : (
-                                            <PersonIcon />
+                                            <PersonIcon sx={{ color: 'text.secondary' }} />
                                         )}
                                         {user.name}
                                     </Box>
@@ -113,6 +134,13 @@ const UserManagement = () => {
                                         label={user.role}
                                         color={user.role === 'admin' ? 'primary' : 'default'}
                                         size="small"
+                                        sx={{
+                                            backgroundColor: user.role === 'admin' 
+                                                ? 'rgba(25, 118, 210, 0.2)' 
+                                                : 'rgba(0, 0, 0, 0.08)',
+                                            backdropFilter: 'blur(10px)',
+                                            color: user.role === 'admin' ? '#1976d2' : 'text.secondary'
+                                        }}
                                     />
                                 </TableCell>
                                 <TableCell>
@@ -120,6 +148,13 @@ const UserManagement = () => {
                                         label={user.active ? 'Active' : 'Inactive'}
                                         color={user.active ? 'success' : 'error'}
                                         size="small"
+                                        sx={{
+                                            backgroundColor: user.active 
+                                                ? 'rgba(46, 125, 50, 0.2)' 
+                                                : 'rgba(211, 47, 47, 0.2)',
+                                            backdropFilter: 'blur(10px)',
+                                            color: user.active ? '#2e7d32' : '#d32f2f'
+                                        }}
                                     />
                                 </TableCell>
                                 <TableCell>
