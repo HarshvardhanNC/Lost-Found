@@ -10,6 +10,7 @@ import Register from './components/auth/Register';
 import StudentDashboard from './components/student/StudentDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import LostFoundPage from './components/features/lost-found/LostFoundPage';
 
 // Create a theme instance
 const theme = createTheme({
@@ -48,10 +49,12 @@ function App() {
 
           {/* Protected Admin Routes */}
           <Route
-            path="/admin/dashboard"
+            path="/admin/*"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
+                <Routes>
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                </Routes>
               </ProtectedRoute>
             }
           />
@@ -61,7 +64,14 @@ function App() {
             path="/student/*"
             element={
               <ProtectedRoute allowedRoles={['student']}>
-                <StudentDashboard />
+                <Routes>
+                  <Route index element={<Navigate to="dashboard" />} />
+                  <Route path="dashboard" element={<StudentDashboard />} />
+                  <Route path="lost-found" element={<LostFoundPage />} />
+                  <Route path="classes" element={<div>Classes Page (Coming Soon)</div>} />
+                  <Route path="cafeteria" element={<div>Cafeteria Page (Coming Soon)</div>} />
+                  <Route path="emergency" element={<div>Emergency Contacts (Coming Soon)</div>} />
+                </Routes>
               </ProtectedRoute>
             }
           />

@@ -12,33 +12,45 @@ const StudentDashboard = () => {
         navigate('/login');
     };
 
+    const handleFeatureClick = (featurePath) => {
+        console.log('Navigating to:', featurePath);
+        navigate(featurePath);
+    };
+
     const features = [
         {
             name: 'Dashboard',
             image: '/images/dashboard.jpg',
-            description: 'Access your personalized dashboard to track your academic progress and activities'
+            description: 'Access your personalized dashboard to track your academic progress and activities',
+            path: '/student/dashboard'
         },
         {
             name: 'Classes',
             image: '/images/classes.jpg',
-            description: 'View your class schedule, assignments, and course materials'
+            description: 'View your class schedule, assignments, and course materials',
+            path: '/student/classes'
         },
         {
             name: 'Cafeteria',
             image: '/images/cafeteria.jpg',
-            description: 'Check cafeteria menu, timings, and make online orders'
+            description: 'Check cafeteria menu, timings, and make online orders',
+            path: '/student/cafeteria'
         },
         {
             name: 'Lost & Found',
             image: '/images/lost-found.jpg',
-            description: 'Report lost items or check found items in the campus'
+            description: 'Report lost items or check found items in the campus',
+            path: '/student/lost-found'
         },
         {
             name: 'Emergency',
             image: '/images/emergency.jpg',
-            description: 'Quick access to emergency contacts and services'
+            description: 'Quick access to emergency contacts and services',
+            path: '/student/emergency'
         }
     ];
+
+    console.log('Current user:', user);
 
     return (
         <div className="student-dashboard">
@@ -49,7 +61,11 @@ const StudentDashboard = () => {
                 </div>
                 <div className="nav-center">
                     {features.map((feature) => (
-                        <button key={feature.name} className="nav-button">
+                        <button 
+                            key={feature.name} 
+                            className="nav-button"
+                            onClick={() => handleFeatureClick(feature.path)}
+                        >
                             {feature.name}
                         </button>
                     ))}
@@ -73,7 +89,12 @@ const StudentDashboard = () => {
             {/* Feature Cards */}
             <div className="features-grid">
                 {features.map((feature) => (
-                    <div key={feature.name} className="feature-card">
+                    <div 
+                        key={feature.name} 
+                        className="feature-card"
+                        onClick={() => handleFeatureClick(feature.path)}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <div className="feature-content">
                             <div className="feature-front">
                                 <img src={feature.image} alt={feature.name} />
