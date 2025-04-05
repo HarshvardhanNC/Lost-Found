@@ -10,6 +10,7 @@ import Register from './components/auth/Register';
 import StudentDashboard from './components/student/StudentDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import CanteenMenu from './components/student/CanteenMenu';
 
 // Create a theme instance
 const theme = createTheme({
@@ -62,6 +63,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['student']}>
                 <StudentDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/canteen"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <CanteenMenu />
               </ProtectedRoute>
             }
           />

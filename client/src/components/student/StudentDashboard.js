@@ -12,30 +12,37 @@ const StudentDashboard = () => {
         navigate('/login');
     };
 
+    const handleFeatureClick = (feature) => {
+        if (feature === 'Cafeteria') {
+            navigate('/student/canteen');
+        }
+        // Add other feature routes here as they are implemented
+    };
+
     const features = [
         {
             name: 'Dashboard',
-            image: '/images/dashboard.jpg',
+            image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
             description: 'Access your personalized dashboard to track your academic progress and activities'
         },
         {
             name: 'Classes',
-            image: '/images/classes.jpg',
+            image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80',
             description: 'View your class schedule, assignments, and course materials'
         },
         {
             name: 'Cafeteria',
-            image: '/images/cafeteria.jpg',
+            image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80',
             description: 'Check cafeteria menu, timings, and make online orders'
         },
         {
             name: 'Lost & Found',
-            image: '/images/lost-found.jpg',
+            image: 'https://images.unsplash.com/photo-1586769852044-692d6e3703f0?auto=format&fit=crop&w=800&q=80',
             description: 'Report lost items or check found items in the campus'
         },
         {
             name: 'Emergency',
-            image: '/images/emergency.jpg',
+            image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80',
             description: 'Quick access to emergency contacts and services'
         }
     ];
@@ -49,7 +56,11 @@ const StudentDashboard = () => {
                 </div>
                 <div className="nav-center">
                     {features.map((feature) => (
-                        <button key={feature.name} className="nav-button">
+                        <button 
+                            key={feature.name} 
+                            className="nav-button"
+                            onClick={() => handleFeatureClick(feature.name)}
+                        >
                             {feature.name}
                         </button>
                     ))}
@@ -73,7 +84,11 @@ const StudentDashboard = () => {
             {/* Feature Cards */}
             <div className="features-grid">
                 {features.map((feature) => (
-                    <div key={feature.name} className="feature-card">
+                    <div 
+                        key={feature.name} 
+                        className="feature-card"
+                        onClick={() => handleFeatureClick(feature.name)}
+                    >
                         <div className="feature-content">
                             <div className="feature-front">
                                 <img src={feature.image} alt={feature.name} />
@@ -99,22 +114,10 @@ const StudentDashboard = () => {
                         <h3>Quick Links</h3>
                         <ul>
                             <li>About Us</li>
-                            <li>Help & Support</li>
                             <li>Privacy Policy</li>
                             <li>Terms of Service</li>
                         </ul>
                     </div>
-                    <div className="footer-section">
-                        <h3>Follow Us</h3>
-                        <div className="social-links">
-                            <span>Facebook</span>
-                            <span>Twitter</span>
-                            <span>Instagram</span>
-                        </div>
-                    </div>
-                </div>
-                <div className="footer-bottom">
-                    <p>&copy; 2024 College Buddy. All rights reserved.</p>
                 </div>
             </footer>
         </div>

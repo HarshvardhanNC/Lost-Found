@@ -1,167 +1,86 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Container,
   Typography,
-  Grid,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
   Button,
+  Tabs,
+  Tab,
+  Paper,
 } from '@mui/material';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import PeopleIcon from '@mui/icons-material/People';
-import EditIcon from '@mui/icons-material/Edit';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import SettingsIcon from '@mui/icons-material/Settings';
+import MenuManagement from './MenuManagement';
+import UserManagement from './UserManagement';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState(0);
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   return (
-    <Box sx={{ display: 'flex' }}>
-      {/* Sidebar */}
-      <Paper
-        sx={{
-          width: 240,
-          minHeight: '100vh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          borderRadius: 0,
-        }}
-      >
-        <List>
-          <ListItem button>
-            <ListItemIcon>
-              <RestaurantMenuIcon />
-            </ListItemIcon>
-            <ListItemText primary="Manage Menu" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Manage Users" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemIcon>
-              <NotificationsActiveIcon />
-            </ListItemIcon>
-            <ListItemText primary="Send Notifications" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItem>
-        </List>
-      </Paper>
-
-      {/* Main content */}
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+      {/* Navigation Bar */}
       <Box
-        component="main"
+        component="nav"
         sx={{
-          flexGrow: 1,
-          p: 3,
-          ml: '240px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem',
+          backgroundColor: 'primary.main',
+          color: 'white',
+          boxShadow: 1
         }}
       >
-        <Container maxWidth="lg">
-          <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
-            Admin Dashboard
-          </Typography>
-          
-          <Grid container spacing={3}>
-            {/* Management Cards */}
-            <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  Cafeteria Menu Management
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Update and manage the cafeteria menu items.
-                </Typography>
-                <Button
-                  variant="contained"
-                  startIcon={<EditIcon />}
-                  sx={{ mr: 1 }}
-                >
-                  Edit Menu
-                </Button>
-              </Paper>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  User Management
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Manage student and admin accounts.
-                </Typography>
-                <Button
-                  variant="contained"
-                  startIcon={<PeopleIcon />}
-                  sx={{ mr: 1 }}
-                >
-                  Manage Users
-                </Button>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  Broadcast Notifications
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Send important announcements to all users.
-                </Typography>
-                <Button
-                  variant="contained"
-                  startIcon={<NotificationsActiveIcon />}
-                >
-                  Create Announcement
-                </Button>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  Recent Activity
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemText 
-                      primary="Menu Updated" 
-                      secondary="Cafeteria menu was updated for next week"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText 
-                      primary="New User Registration" 
-                      secondary="5 new students registered today"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText 
-                      primary="Announcement Sent" 
-                      secondary="Emergency notification sent to all users"
-                    />
-                  </ListItem>
-                </List>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
+        <Typography variant="h5">Admin Dashboard</Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Typography>Welcome, {user?.name}</Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        </Box>
       </Box>
+
+      {/* Main Content */}
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Paper sx={{ mb: 3 }}>
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+          >
+            <Tab label="Menu Management" />
+            <Tab label="User Management" />
+            <Tab label="Reports" />
+          </Tabs>
+        </Paper>
+
+        <Box sx={{ mt: 3 }}>
+          {activeTab === 0 && <MenuManagement />}
+          {activeTab === 1 && <UserManagement />}
+          {activeTab === 2 && (
+            <Typography variant="h6" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              Reports - Coming Soon
+            </Typography>
+          )}
+        </Box>
+      </Container>
     </Box>
   );
 };
