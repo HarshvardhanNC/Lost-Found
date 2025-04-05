@@ -2,8 +2,9 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const userRole = localStorage.getItem('userRole');
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userRole = user.role;
 
   if (!token) {
     // Not logged in
@@ -12,7 +13,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (!allowedRoles.includes(userRole)) {
     // User's role is not authorized
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

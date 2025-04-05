@@ -9,7 +9,6 @@ import {
   Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,22 +32,35 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await login(formData);
-      
-      // Store user info in localStorage
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('userRole', response.user.role);
-      localStorage.setItem('userEmail', response.user.email);
-      localStorage.setItem('userName', response.user.name);
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+      });
 
-      // Redirect based on role
-      if (response.user.role === 'admin') {
-        navigate('/admin/dashboard');
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        console.log('User role:', data.user.role);
+        console.log('Redirecting to:', data.user.role === 'admin' ? '/admin/dashboard' : '/student');
+        
+        // Redirect based on user role
+        if (data.user.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/student');
+        }
       } else {
-        navigate('/student/dashboard');
+        setError(data.error || 'Login failed');
       }
     } catch (error) {
-      setError(error.error || 'An error occurred during login');
+      console.error('Login error:', error);
+      setError('An error occurred during login');
     } finally {
       setLoading(false);
     }
