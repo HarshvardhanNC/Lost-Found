@@ -57,13 +57,13 @@ const Register = () => {
   return (
     <Box
       sx={{
-        height: '100vh',
+        minHeight: '100vh',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: 'url(https://allegiance-educare.in/storage/uploads/colleges/1662553710campus%20front.jpg)',
+        backgroundImage: 'url(/images/campus.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

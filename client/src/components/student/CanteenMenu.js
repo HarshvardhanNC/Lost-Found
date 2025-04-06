@@ -9,9 +9,12 @@ import {
     CircularProgress,
     Alert,
     Container,
-    Paper
+    Paper,
+    Button
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // Food category images mapping
 const categoryImages = {
@@ -51,14 +54,29 @@ const HeroSection = styled(Paper)(({ theme }) => ({
     backgroundColor: '#1a237e',
     color: '#fff',
     marginBottom: theme.spacing(4),
+    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1567521464027-f127ff144326?auto=format&fit=crop&w=1920&q=80")',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    padding: theme.spacing(6),
+    padding: theme.spacing(8),
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 0
+    borderRadius: 0,
+    minHeight: '300px',
+    '& h2': {
+        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+        marginBottom: theme.spacing(2),
+        fontWeight: 600
+    },
+    '& p': {
+        fontSize: '1.2rem',
+        color: '#e0e7ff',
+        textAlign: 'center',
+        maxWidth: '800px',
+        textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+    }
 }));
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -86,10 +104,43 @@ const CategoryTitle = styled(Typography)(({ theme }) => ({
     }
 }));
 
+const BackButton = styled(Button)(({ theme }) => ({
+    position: 'fixed',
+    top: theme.spacing(3),
+    left: theme.spacing(3),
+    zIndex: 1000,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    color: '#ffffff',
+    '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.35)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)'
+    },
+    padding: theme.spacing(1.5, 3),
+    borderRadius: '25px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    textTransform: 'none',
+    fontSize: '1rem',
+    fontWeight: 600,
+    backdropFilter: 'blur(8px)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    transition: 'all 0.3s ease',
+    letterSpacing: '0.5px',
+    '& .MuiSvgIcon-root': {
+        color: '#ffffff'
+    }
+}));
+
 const CanteenMenu = () => {
+    const navigate = useNavigate();
     const [menu, setMenu] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+
+    const handleBack = () => {
+        navigate('/student/dashboard');
+    };
 
     useEffect(() => {
         const fetchMenu = async () => {
@@ -172,9 +223,18 @@ const CanteenMenu = () => {
 
     return (
         <Box>
+            <BackButton
+                onClick={handleBack}
+                startIcon={<ArrowBackIcon />}
+            >
+                Back to Dashboard
+            </BackButton>
             <HeroSection>
                 <Typography variant="h2" align="center" gutterBottom>
                     Today's Menu
+                </Typography>
+                <Typography variant="h6" align="center">
+                    Explore our delicious offerings for the day
                 </Typography>
             </HeroSection>
 
