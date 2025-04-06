@@ -16,6 +16,10 @@ const StudentDashboard = () => {
     const handleFeatureClick = (feature) => {
         if (feature === 'Cafeteria') {
             navigate('/student/canteen');
+        } else if (feature === 'Lost & Found') {
+            navigate('/student/lost-found');
+        } else if (feature === 'Emergency') {
+            navigate('/student/emergency-contacts');
         }
         // Add other feature routes here as they are implemented
     };

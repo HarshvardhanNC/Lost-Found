@@ -12,7 +12,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import CanteenMenu from './components/student/CanteenMenu';
 import LostFoundPage from './components/features/lost-found/LostFoundPage';
-import EmergencyContactsPage from './components/features/emergency-contacts/EmergencyContactsPage';
+import EmergencyContacts from './components/features/emergency-contacts/EmergencyContacts';
 
 // Create a theme instance
 const theme = createTheme({
@@ -85,10 +85,10 @@ function App() {
             }
           />
           <Route
-            path="/student/emergency-contacts"
+            path="/student/emergency"
             element={
               <ProtectedRoute allowedRoles={['student']}>
-                <EmergencyContactsPage />
+                <EmergencyContacts />
               </ProtectedRoute>
             }
           />
