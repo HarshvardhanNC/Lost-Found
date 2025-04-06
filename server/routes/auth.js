@@ -162,4 +162,29 @@ router.get('/me', auth, async (req, res) => {
     }
 });
 
+// Get all users (admin only)
+router.get('/users', auth, async (req, res) => {
+    try {
+        // Check if the user is an admin
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied. Admin only.' });
+        }
+
+        // Fetch all users
+        const users = await User.find({}, '-password').sort({ createdAt: -1 });
+        
+        // Add last login info (you can implement this later)
+        const usersWithActivity = users.map(user => ({
+            ...user.toObject(),
+            lastLogin: user.createdAt, // For now, using createdAt as lastLogin
+            active: true // You can implement actual active status later
+        }));
+
+        res.json(usersWithActivity);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router; 

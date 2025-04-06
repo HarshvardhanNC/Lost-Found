@@ -11,32 +11,41 @@ import {
     Paper,
     CircularProgress,
     Alert,
-    Chip
+    Chip,
+    IconButton,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     maxHeight: 'calc(100vh - 250px)',
-    background: 'rgba(255, 255, 255, 0.7)',
+    background: 'rgba(255, 255, 255, 0.95)',
     backdropFilter: 'blur(10px)',
     borderRadius: '12px',
     boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
     border: '1px solid rgba(255, 255, 255, 0.3)',
     '& .MuiTableCell-head': {
-        backgroundColor: 'rgba(25, 118, 210, 0.2)',
-        backdropFilter: 'blur(10px)',
-        color: 'white',
+        backgroundColor: '#1976d2',
+        color: '#ffffff',
         fontWeight: 'bold',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        fontSize: '1rem',
+        borderBottom: '2px solid rgba(255, 255, 255, 0.2)'
     },
     '& .MuiTableCell-body': {
-        color: 'rgba(0, 0, 0, 0.87)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        color: '#000000',
+        fontSize: '0.95rem',
+        fontWeight: 500,
+        borderBottom: '1px solid rgba(0, 0, 0, 0.1)'
     },
     '& .MuiTableRow-root:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(25, 118, 210, 0.08)',
         transition: 'all 0.3s ease'
     }
 }));
@@ -45,6 +54,8 @@ const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
 
     useEffect(() => {
         fetchUsers();
@@ -53,7 +64,7 @@ const UserManagement = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/users', {
+            const response = await fetch('http://localhost:5000/api/auth/users', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -70,6 +81,38 @@ const UserManagement = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDeleteClick = (user) => {
+        setUserToDelete(user);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:5000/api/auth/users/${userToDelete._id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete user');
+            }
+
+            setUsers(users.filter(user => user._id !== userToDelete._id));
+            setDeleteDialogOpen(false);
+            setUserToDelete(null);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setUserToDelete(null);
     };
 
     if (loading) {
@@ -100,7 +143,7 @@ const UserManagement = () => {
 
     return (
         <Box>
-            <Typography variant="h5" gutterBottom sx={{ mb: 3, color: 'white' }}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 3, color: '#000000', fontWeight: 'bold' }}>
                 User Management
             </Typography>
 
@@ -113,6 +156,7 @@ const UserManagement = () => {
                             <TableCell>Role</TableCell>
                             <TableCell>Status</TableCell>
                             <TableCell>Last Login</TableCell>
+                            <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -121,14 +165,14 @@ const UserManagement = () => {
                                 <TableCell>
                                     <Box display="flex" alignItems="center" gap={1}>
                                         {user.role === 'admin' ? (
-                                            <AdminPanelSettingsIcon sx={{ color: 'primary.main' }} />
+                                            <AdminPanelSettingsIcon sx={{ color: '#1976d2' }} />
                                         ) : (
-                                            <PersonIcon sx={{ color: 'text.secondary' }} />
+                                            <PersonIcon sx={{ color: '#666666' }} />
                                         )}
-                                        {user.name}
+                                        <span style={{ color: '#000000', fontWeight: 500 }}>{user.name}</span>
                                     </Box>
                                 </TableCell>
-                                <TableCell>{user.email}</TableCell>
+                                <TableCell style={{ color: '#000000', fontWeight: 500 }}>{user.email}</TableCell>
                                 <TableCell>
                                     <Chip
                                         label={user.role}
@@ -136,10 +180,10 @@ const UserManagement = () => {
                                         size="small"
                                         sx={{
                                             backgroundColor: user.role === 'admin' 
-                                                ? 'rgba(25, 118, 210, 0.2)' 
-                                                : 'rgba(0, 0, 0, 0.08)',
-                                            backdropFilter: 'blur(10px)',
-                                            color: user.role === 'admin' ? '#1976d2' : 'text.secondary'
+                                                ? '#1976d2' 
+                                                : '#f5f5f5',
+                                            color: user.role === 'admin' ? '#ffffff' : '#000000',
+                                            fontWeight: 'medium'
                                         }}
                                     />
                                 </TableCell>
@@ -150,23 +194,58 @@ const UserManagement = () => {
                                         size="small"
                                         sx={{
                                             backgroundColor: user.active 
-                                                ? 'rgba(46, 125, 50, 0.2)' 
-                                                : 'rgba(211, 47, 47, 0.2)',
-                                            backdropFilter: 'blur(10px)',
-                                            color: user.active ? '#2e7d32' : '#d32f2f'
+                                                ? '#4caf50' 
+                                                : '#f44336',
+                                            color: '#ffffff',
+                                            fontWeight: 'medium'
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ color: '#000000', fontWeight: 500 }}>
                                     {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never'}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {user.role !== 'admin' && (
+                                        <IconButton 
+                                            onClick={() => handleDeleteClick(user)}
+                                            color="error"
+                                            size="small"
+                                            title="Delete User"
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </StyledTableContainer>
+
+            <Dialog
+                open={deleteDialogOpen}
+                onClose={handleDeleteCancel}
+                aria-labelledby="delete-dialog-title"
+            >
+                <DialogTitle id="delete-dialog-title" sx={{ color: '#000000' }}>
+                    Confirm Delete User
+                </DialogTitle>
+                <DialogContent>
+                    <Typography sx={{ color: '#000000' }}>
+                        Are you sure you want to delete user "{userToDelete?.name}"? This action cannot be undone.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteCancel} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };
 
-export default UserManagement; 
+export default UserManagement;
