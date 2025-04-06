@@ -90,7 +90,7 @@ const EmergencyContactsPage = () => {
     return (
         <div className="emergency-contacts-container">
             <div className="emergency-contacts-header">
-                <Link to="/dashboard" className="dashboard-button">
+                <Link to="/student/dashboard" className="dashboard-button">
                     <i className="fas fa-arrow-left"></i>
                     Back to Dashboard
                 </Link>

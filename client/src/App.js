@@ -13,6 +13,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import CanteenMenu from './components/student/CanteenMenu';
 import LostFoundPage from './components/features/lost-found/LostFoundPage';
 import EmergencyContactsPage from './components/features/emergency-contacts/EmergencyContactsPage';
+import Timetable from './components/features/timetable/Timetable';
 
 // Create a theme instance
 const theme = createTheme({
@@ -89,6 +90,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['student']}>
                 <EmergencyContactsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/timetable"
+            element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <Timetable />
               </ProtectedRoute>
             }
           />

@@ -26,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/emergency-contacts', emergencyContactsRoutes);
 app.use('/api/lost-found', lostFoundRoutes);
+app.use('/api/timetable', require('./routes/timetable'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

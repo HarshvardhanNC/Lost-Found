@@ -14,14 +14,23 @@ const StudentDashboard = () => {
     };
 
     const handleFeatureClick = (feature) => {
-        if (feature === 'Cafeteria') {
-            navigate('/student/canteen');
-        } else if (feature === 'Lost & Found') {
-            navigate('/student/lost-found');
-        } else if (feature === 'Emergency') {
-            navigate('/student/emergency-contacts');
+        switch (feature) {
+            case 'Classes':
+                navigate('/student/timetable');
+                break;
+            case 'Cafeteria':
+                navigate('/student/canteen');
+                break;
+            case 'Lost & Found':
+                navigate('/student/lost-found');
+                break;
+            case 'Emergency':
+                navigate('/student/emergency-contacts');
+                break;
+            default:
+                // Handle other features as they are implemented
+                break;
         }
-        // Add other feature routes here as they are implemented
     };
 
     const handleLogoClick = () => {

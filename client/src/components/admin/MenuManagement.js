@@ -85,8 +85,12 @@ const MenuManagement = () => {
             }
 
             const data = await response.json();
+            console.log('Daily Menu Data:', data);
+            console.log('Number of items:', data?.items?.length);
+            console.log('Items:', data?.items?.map(item => item.menuItem.name));
             setDailyMenu(data);
         } catch (err) {
+            console.error('Error fetching daily menu:', err);
             setError(err.message);
         } finally {
             setLoading(false);

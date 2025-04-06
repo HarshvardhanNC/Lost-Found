@@ -95,40 +95,62 @@ router.get('/today', auth, async (req, res) => {
         }).populate('items.menuItem');
 
         console.log('Found existing daily menu:', dailyMenu ? 'yes' : 'no');
-        console.log('Current items count:', dailyMenu?.items?.length || 0);
+        console.log('Initial daily menu items:', dailyMenu?.items?.length || 0);
+        
+        // Get all master menu items
+        const allMasterItems = await MenuItem.find();
+        console.log('Found master items:', allMasterItems.length);
+        console.log('Master items:', allMasterItems.map(item => item.name));
 
-        // If no menu exists or menu has no items, create/update it with all master items
-        if (!dailyMenu || !dailyMenu.items || dailyMenu.items.length === 0) {
-            console.log('Creating/updating daily menu with master items...');
-            const allItems = await MenuItem.find();
-            console.log('Found master items:', allItems.length);
-            
-            const items = allItems.map(item => ({
+        // If no menu exists, create it with all master items
+        if (!dailyMenu) {
+            console.log('Creating new daily menu...');
+            const items = allMasterItems.map(item => ({
                 menuItem: item._id,
                 isAvailable: false
             }));
 
-            if (dailyMenu) {
-                // Update existing menu
-                dailyMenu.items = items;
+            dailyMenu = new DailyMenu({
+                date: today,
+                items,
+                updatedBy: req.user._id
+            });
+            await dailyMenu.save();
+            console.log('New daily menu saved');
+            dailyMenu = await DailyMenu.findById(dailyMenu._id).populate('items.menuItem');
+            console.log('New daily menu items:', dailyMenu.items.length);
+        } else {
+            // Check if all master items are in the daily menu
+            const dailyMenuItemIds = dailyMenu.items.map(item => item.menuItem._id.toString());
+            const missingItems = allMasterItems.filter(item => 
+                !dailyMenuItemIds.includes(item._id.toString())
+            );
+
+            console.log('Current daily menu items:', dailyMenuItemIds.length);
+            console.log('Missing items:', missingItems.length);
+
+            // If there are missing items, add them to the daily menu
+            if (missingItems.length > 0) {
+                console.log('Adding missing items to daily menu:', missingItems.length);
+                console.log('Missing item names:', missingItems.map(item => item.name));
+                const newItems = missingItems.map(item => ({
+                    menuItem: item._id,
+                    isAvailable: false
+                }));
+
+                dailyMenu.items.push(...newItems);
                 dailyMenu.updatedBy = req.user._id;
                 await dailyMenu.save();
-            } else {
-                // Create new menu
-                dailyMenu = new DailyMenu({
-                    date: today,
-                    items,
-                    updatedBy: req.user._id
-                });
-                await dailyMenu.save();
+                console.log('Updated daily menu saved');
+                dailyMenu = await DailyMenu.findById(dailyMenu._id).populate('items.menuItem');
+                console.log('Updated daily menu items:', dailyMenu.items.length);
             }
-            
-            console.log('Daily menu saved, populating items...');
-            dailyMenu = await DailyMenu.findById(dailyMenu._id).populate('items.menuItem');
-            console.log('Items populated');
         }
 
-        console.log('Sending daily menu with items:', dailyMenu?.items?.length || 0);
+        // Verify the final menu items
+        console.log('Final daily menu items:', dailyMenu.items.length);
+        console.log('Item names:', dailyMenu.items.map(item => item.menuItem.name));
+        
         res.json(dailyMenu);
     } catch (error) {
         console.error('Error in /today:', error);
@@ -146,13 +168,15 @@ router.put('/today/availability', auth, async (req, res) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
+        // Get the daily menu with populated items
         let dailyMenu = await DailyMenu.findOne({
             date: {
                 $gte: today,
                 $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
             }
-        });
+        }).populate('items.menuItem');
 
+        // If no menu exists, create one with all master items
         if (!dailyMenu) {
             const allItems = await MenuItem.find();
             const items = allItems.map(item => ({
@@ -172,7 +196,7 @@ router.put('/today/availability', auth, async (req, res) => {
         if (Array.isArray(itemUpdates)) {
             itemUpdates.forEach(update => {
                 const item = dailyMenu.items.find(
-                    i => i.menuItem.toString() === update.menuItemId
+                    i => i.menuItem._id.toString() === update.menuItemId
                 );
                 if (item) {
                     item.isAvailable = update.isAvailable;
@@ -180,11 +204,20 @@ router.put('/today/availability', auth, async (req, res) => {
             });
         }
 
+        // Save the changes
         dailyMenu.updatedBy = req.user._id;
         await dailyMenu.save();
         
         // Fetch the updated menu with populated items
         dailyMenu = await DailyMenu.findById(dailyMenu._id).populate('items.menuItem');
+        
+        // Log the final state
+        console.log('Updated daily menu items:', dailyMenu.items.length);
+        console.log('Available items:', dailyMenu.items.filter(i => i.isAvailable).length);
+        console.log('Item availability:', dailyMenu.items.map(i => ({
+            name: i.menuItem.name,
+            available: i.isAvailable
+        })));
         
         res.json(dailyMenu);
     } catch (error) {
