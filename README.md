@@ -1,180 +1,105 @@
-# College Buddy
+# Lost & Found System
 
-College Buddy is a comprehensive web application designed to enhance the college experience by providing students with easy access to essential campus services and information.
+A web application for managing lost and found items in a college environment. This system allows students to report lost items, post found items, and claim items that they've lost.
 
 ## Features
 
-### 1. Student Dashboard
-- Modern and intuitive user interface
-- Quick access to all features
-- Personalized welcome section
-- Responsive design for all devices
-
-### 2. Class Timetable
-- Weekly class schedule view (Monday to Friday)
-- Time slots from 8:30 AM to 3:30 PM
-- Easy-to-use interface for adding and editing subjects
-- Personal timetable for each student
-- Real-time updates and storage
-
-### 3. Cafeteria Menu
-- View today's menu items
-- Categorized food items (Breakfast, Lunch, Dinner, Snacks)
-- Price and availability information
-- Admin panel for menu management
-
-### 4. Lost and Found
-- Report lost items
-- List found items
-- Search and filter functionality
-- Item status tracking
-- Image upload support
-
-### 5. Emergency Contacts
-- Quick access to important contacts
-- Emergency service numbers
-- Campus security contacts
-- Medical facility information
+- **User Authentication**: Secure login and registration system
+- **Lost Item Reporting**: Students can report items they've lost
+- **Found Item Posting**: Students can post items they've found
+- **Item Claiming**: Only the person who posted a found item can mark it as claimed
+- **Item Status Tracking**: Clear indication of claimed items with timestamps
+- **Filtering**: Filter items by type (lost/found) or view all items
+- **Responsive Design**: Works on desktop and mobile devices
 
 ## Technology Stack
 
-### Frontend
-- React.js
-- Material-UI
-- CSS3 with modern styling
-- Responsive design principles
+- **Frontend**: React.js, Material-UI
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT (JSON Web Tokens)
 
-### Backend
-- Node.js
-- Express.js
-- MongoDB
-- JWT Authentication
+## Getting Started
 
-## Prerequisites
+### Prerequisites
 
-Before running this project, make sure you have the following installed:
 - Node.js (v14 or higher)
-- MongoDB (v4 or higher)
-- npm (Node Package Manager)
+- MongoDB (local or Atlas)
+- npm or yarn
 
-## Installation
+### Installation
 
-1. Clone the repository
-```bash
-git clone [repository-url]
-```
+1. Clone the repository:
+   ```
+   git clone https://github.com/HarshvardhanNC/Lost-Found.git
+   cd Lost-Found
+   ```
 
-2. Install dependencies for both client and server
-```bash
-# Install server dependencies
-cd server
-npm install
+2. Install dependencies for both client and server:
+   ```
+   # Install server dependencies
+   cd server
+   npm install
 
-# Install client dependencies
-cd ../client
-npm install
-```
+   # Install client dependencies
+   cd ../client
+   npm install
+   ```
 
-3. Set up environment variables
-Create a .env file in the server directory with:
-```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/college-buddy
-JWT_SECRET=your_jwt_secret
-```
+3. Set up environment variables:
+   - Create a `.env` file in the server directory with:
+     ```
+     MONGODB_URI=your_mongodb_connection_string
+     JWT_SECRET=your_jwt_secret
+     PORT=5000
+     ```
 
-4. Start the application
-```bash
-# Start MongoDB
-mongod
+4. Start the application:
+   ```
+   # Start the server
+   cd server
+   npm start
 
-# Start server (from server directory)
-npm start
+   # Start the client (in a new terminal)
+   cd client
+   npm start
+   ```
 
-# Start client (from client directory)
-npm start
-```
-
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
+5. Access the application at `http://localhost:3000`
 
 ## Usage
 
-### Student Access
-1. Register/Login with student credentials
-2. Access dashboard
-3. Navigate to desired features:
-   - View/edit class timetable
-   - Check cafeteria menu
-   - Report/search lost items
-   - Access emergency contacts
+1. **Register/Login**: Create an account or log in to an existing one
+2. **Report Lost Item**: Click "Report Item" and fill in the details of your lost item
+3. **Post Found Item**: Click "Report Item" and select "Found Item" to post an item you've found
+4. **Claim Items**: If you posted a found item, you can mark it as claimed when someone retrieves it
+5. **Browse Items**: Use the filter buttons to view all items, lost items, or found items
 
-### Admin Access
-Default admin credentials:
-- Email: admin@collegebuddy.com
-- Password: admin123
+## Project Structure
 
-Admin features:
-1. Manage menu items
-2. Update item availability
-3. Monitor lost and found reports
-
-## API Endpoints
-
-### Authentication
-- POST `/api/auth/register` - Register new user
-- POST `/api/auth/login` - User login
-
-### Timetable
-- GET `/api/timetable` - Get user's timetable
-- POST `/api/timetable` - Update timetable entry
-
-### Menu
-- GET `/api/menu/today` - Get today's menu
-- POST `/api/menu` - Add new menu item (Admin)
-- PUT `/api/menu/:id` - Update menu item (Admin)
-
-### Lost and Found
-- GET `/api/lost-found` - Get all items
-- POST `/api/lost-found` - Report new item
-- PUT `/api/lost-found/:id` - Update item status
-
-### Emergency Contacts
-- GET `/api/emergency-contacts` - Get all emergency contacts
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## Security
-
-- JWT-based authentication
-- Protected API endpoints
-- Role-based access control
-- Secure password hashing
-- Input validation and sanitization
-
-## Future Enhancements
-
-- Real-time notifications
-- Mobile application
-- Online food ordering
-- Student attendance tracking
-- Event calendar integration
-- Chat support system
+```
+Lost-Found/
+├── client/                 # React frontend
+│   ├── public/             # Static files
+│   └── src/                # Source files
+│       ├── components/     # React components
+│       ├── App.js          # Main application component
+│       └── index.js        # Entry point
+├── server/                 # Node.js backend
+│   ├── middleware/         # Express middleware
+│   ├── models/             # Database models
+│   ├── routes/             # API routes
+│   └── server.js           # Server entry point
+└── README.md               # Project documentation
+```
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE.md file for details
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
 - Material-UI for the component library
-- MongoDB for the database solution
+- MongoDB for the database
 - Express.js for the backend framework
-- React.js for the frontend framework 
+- React for the frontend framework 

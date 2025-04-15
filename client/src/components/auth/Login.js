@@ -47,13 +47,13 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(data.user));
         
         console.log('User role:', data.user.role);
-        console.log('Redirecting to:', data.user.role === 'admin' ? '/admin/dashboard' : '/student');
+        console.log('Redirecting to:', data.user.role === 'admin' ? '/admin/dashboard' : '/lost-found');
         
         // Redirect based on user role
         if (data.user.role === 'admin') {
           navigate('/admin/dashboard');
         } else {
-          navigate('/student');
+          navigate('/lost-found');
         }
       } else {
         setError(data.error || 'Login failed');

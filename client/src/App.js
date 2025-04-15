@@ -7,13 +7,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Home from './components/Home';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import StudentDashboard from './components/student/StudentDashboard';
-import AdminDashboard from './components/admin/AdminDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import CanteenMenu from './components/student/CanteenMenu';
 import LostFoundPage from './components/features/lost-found/LostFoundPage';
-import EmergencyContactsPage from './components/features/emergency-contacts/EmergencyContactsPage';
-import Timetable from './components/features/timetable/Timetable';
 
 // Create a theme instance
 const theme = createTheme({
@@ -50,54 +45,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected Admin Routes */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-
           {/* Protected Student Routes */}
           <Route
-            path="/student/*"
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <StudentDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/student/canteen"
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <CanteenMenu />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/student/lost-found"
+            path="/lost-found"
             element={
               <ProtectedRoute allowedRoles={['student']}>
                 <LostFoundPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/student/emergency-contacts"
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <EmergencyContactsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/student/timetable"
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <Timetable />
               </ProtectedRoute>
             }
           />

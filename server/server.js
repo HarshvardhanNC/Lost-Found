@@ -3,8 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const menuRoutes = require('./routes/menu');
-const emergencyContactsRoutes = require('./routes/emergencyContacts');
 const lostFoundRoutes = require('./routes/lostFound');
 
 const app = express();
@@ -23,10 +21,7 @@ mongoose.connect('mongodb://localhost:27017/college-buddy', {
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/menu', menuRoutes);
-app.use('/api/emergency-contacts', emergencyContactsRoutes);
 app.use('/api/lost-found', lostFoundRoutes);
-app.use('/api/timetable', require('./routes/timetable'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

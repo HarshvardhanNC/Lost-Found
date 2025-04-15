@@ -13,7 +13,8 @@ const lostFoundSchema = new mongoose.Schema({
     contact: { type: String, required: true },
     imageUrl: { type: String, default: '' },
     reportedBy: { type: String, required: true },
-    claimed: { type: Boolean, default: false }
+    claimed: { type: Boolean, default: false },
+    claimedAt: { type: Date, default: null }
 }, {
     timestamps: true
 });
@@ -102,13 +103,15 @@ router.post('/:id/mark-claimed', async function(req, res) {
         
         // Update the item
         item.claimed = true;
+        item.claimedAt = new Date();
         await item.save();
         
         console.log('Item marked as claimed successfully');
         res.json({ 
             success: true,
             message: 'Item marked as claimed successfully',
-            claimed: true
+            claimed: true,
+            claimedAt: item.claimedAt
         });
     } catch (error) {
         console.error('Error marking item as claimed:', error);

@@ -95,19 +95,26 @@ const LostFoundPage = () => {
                 setItems(prevItems => 
                     prevItems.map(item => 
                         item._id === itemId 
-                            ? { ...item, claimed: true }
+                            ? { 
+                                ...item, 
+                                claimed: true,
+                                claimedAt: response.data.claimedAt
+                              }
                             : item
                     )
                 );
+                alert('Item has been marked as claimed successfully!');
             }
         } catch (error) {
             console.error('Error marking item as claimed:', error);
-            alert('Failed to mark item as claimed. Please try again.');
+            alert(error.response?.data?.message || 'Failed to mark item as claimed. Please try again.');
         }
     };
 
-    const handleGoToDashboard = () => {
-        navigate('/student/dashboard');
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
     };
 
     const filteredItems = items.filter(item => {
@@ -127,9 +134,12 @@ const LostFoundPage = () => {
         <div className="lost-found-container">
             <div className="page-header">
                 <h1>Lost & Found</h1>
-                <button className="dashboard-btn" onClick={handleGoToDashboard}>
-                    Go to Dashboard
-                </button>
+                <div className="user-actions">
+                    <span className="user-name">Welcome, {currentUser?.name}</span>
+                    <button className="logout-btn" onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
                 <div className="filter-buttons">
                     <button 
                         className={`filter-btn all ${filter === 'all' ? 'active' : ''}`}
@@ -182,22 +192,27 @@ const LostFoundPage = () => {
                                     <p className="item-contact">
                                         Contact: {item.contact}
                                     </p>
-                                    {currentUser && 
-                                     item.reportedBy && 
-                                     item.reportedBy.toString() === currentUser.id && 
-                                     item.type === 'found' && 
-                                     !item.claimed && (
-                                        <button 
-                                            className="mark-claimed-btn"
-                                            onClick={() => handleMarkAsClaimed(item._id)}
-                                        >
-                                            Mark as Claimed
-                                        </button>
-                                    )}
-                                    {item.claimed && (
+                                    {item.claimed ? (
                                         <div className="claimed-badge">
-                                            <span>Claimed</span>
+                                            <span>✓ Claimed</span>
+                                            {item.claimedAt && (
+                                                <span className="claimed-date">
+                                                    on {new Date(item.claimedAt).toLocaleDateString()}
+                                                </span>
+                                            )}
                                         </div>
+                                    ) : (
+                                        currentUser && 
+                                        item.reportedBy && 
+                                        item.reportedBy.toString() === currentUser.id && 
+                                        item.type === 'found' && (
+                                            <button 
+                                                className="mark-claimed-btn"
+                                                onClick={() => handleMarkAsClaimed(item._id)}
+                                            >
+                                                Mark as Claimed
+                                            </button>
+                                        )
                                     )}
                                 </div>
                             </div>
@@ -208,8 +223,8 @@ const LostFoundPage = () => {
 
             {showAddForm && (
                 <LostFoundForm 
-                    onSubmit={handleAddItem}
                     onClose={() => setShowAddForm(false)}
+                    onSubmit={handleAddItem}
                 />
             )}
         </div>
